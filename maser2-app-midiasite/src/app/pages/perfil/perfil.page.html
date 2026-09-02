@@ -1,0 +1,54 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="fundo">
+    <ion-buttons slot="end">
+      <ion-button (click)="exibirSobre()">
+        <ion-icon name="information-circle-outline" color="medium" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="fundo" class="ion-padding">
+
+    <div class="ion-padding-bottom">
+      <ion-avatar>
+        <img src="../../assets/avatar.svg">
+      </ion-avatar>
+  
+      <ion-item lines="none" class="ion-text-center">
+        <ion-label>
+          <h1>{{ motorista.getNome() }}</h1>
+        </ion-label>
+      </ion-item>
+    </div>
+  
+    <ion-card mode="ios">
+      <ion-item lines="full">
+        <ion-label>
+          <h3>ID Login</h3>
+          <h2>{{ motorista.getEmail() }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <h3>Celular</h3>
+          <h2>{{ motorista.getCelular() }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-card> 
+
+    <ion-card mode="ios" style="margin-top: 0px; margin-bottom: 0px;" *ngIf="(global.getModoDeveloper() == 'S')">
+      <ion-item lines="none" color="azul-logo">
+        <ion-label class="ion-text-center">
+          <h2>Modo Developer Ativado</h2>
+        </ion-label>
+      </ion-item>
+    </ion-card> 
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="fundo"  class="maser-ion-padding">
+    <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round" class="ion-padding-horizontal" (click)="fazerLogout()">Sair</ion-button>
+  </ion-toolbar>
+</ion-footer>

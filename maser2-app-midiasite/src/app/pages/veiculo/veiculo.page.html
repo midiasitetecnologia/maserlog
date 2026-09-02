@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="location.back()">
+        <ion-icon name="arrow-back-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Selecione o veículo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="(motorista.veiculosDisp.length > 0)">
+
+    <ion-radio-group value="{{ motorista.getPlacaVeiculo() }}" (ionChange)="selecionarVeiculo($event)">
+
+      <ion-list>
+        <ion-item lines="full" *ngFor="let veiculo of motorista.veiculosDisp">
+          <ion-label *ngIf="(veiculo.placa == null)">Nenhum (não estou atendendo)</ion-label>
+          <ion-label *ngIf="(veiculo.placa != null)">{{ veiculo.placa }}</ion-label>
+          <ion-label color="medium" *ngIf="(veiculo.placa != null)">{{ veiculo.descr_tipo_veiculo }}</ion-label>
+          <ion-radio slot="end" value="{{ veiculo.placa }}"></ion-radio>
+        </ion-item>
+      </ion-list>
+
+    </ion-radio-group>
+
+  </div>
+
+</ion-content>
+
+<ion-footer *ngIf="(motorista.veiculosDisp.length > 0)">
+  <ion-toolbar color="toolbar">
+    <div class="ion-padding">
+      <ion-button mode="ios" expand="full" shape="round" (click)="alterarVeiculo()">CONFIRMAR</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

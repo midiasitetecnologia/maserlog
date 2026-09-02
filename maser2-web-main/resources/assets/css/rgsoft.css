@@ -1,0 +1,74 @@
+.badge_cinza {		
+  word-wrap: break-word;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 85%;		
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;		
+  padding: .3rem .5rem;
+  text-align: center;
+  border-radius: .358rem;
+  color: #82868b!important;
+  background-color: rgba(130,134,139,.12);
+}
+
+.badge_azul {
+  word-wrap: break-word;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 85%;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;    
+  padding: .3rem .5rem;
+  text-align: center;
+  border-radius: .358rem;
+  color: #174083!important;
+  background-color: rgba(23,64,131,.12);
+}
+
+.badge_vermelho {
+  word-wrap: break-word;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 85%;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;    
+  padding: .3rem .5rem;
+  text-align: center;
+  border-radius: .358rem;
+  color: #ea5455!important;
+  background-color: rgba(234,84,85,.12);
+}
+
+.badge_laranja {
+  word-wrap: break-word;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 85%;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;    
+  padding: .3rem .5rem;
+  text-align: center;
+  border-radius: .358rem;
+  color: #ff9f43!important;
+  background-color: rgba(255,134,13,.12);  
+}
+
+.badge_verde {
+  word-wrap: break-word;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 85%;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;    
+  padding: .3rem .5rem;
+  text-align: center;
+  border-radius: .358rem;
+  color: #28c76f!important;
+  background-color: rgba(40,199,111,.12);
+}

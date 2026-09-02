@@ -1,0 +1,476 @@
+<ion-header>
+
+  <ion-toolbar color="fundo">
+    <ion-buttons slot="start">
+      <ion-button (click)="location.back()">
+        <ion-icon name="arrow-back-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title color="azul-logo">
+      {{ coleta.getIdSolicitacao(coleta.dadosColetaAtual, true) }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+
+      <!-- Botões para atualizar ou excluir comanda -->
+      <ion-button (click)="atualizarComanda()" *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">
+        <ion-icon name="create-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="excluirComanda()" *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">
+        <ion-icon name="trash-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <!-- SEGMENTO - Observação: Tive que por um ion-segment para cada variante de cor conforme 
+    o status da solicitação, pois NÃO funcionou mudar a cor diretamente no componente. -->
+  <div *ngIf="('C0|C1|E0|E1'.indexOf(coleta.dadosColetaAtual.status) > -1)">
+    <ion-segment color="vermelho-web" [value]="segmento" (ionChange)="setSegmento($event)"
+      *ngIf="(carregando == false)">
+      <ion-segment-button value="solic">
+        <ion-label
+          *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false) && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)">
+          Solicitação</ion-label>
+        <ion-label *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == true)">Contrato</ion-label>
+        <ion-label *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">Comanda</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="coleta">
+        <ion-label>Coleta</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="entrega">
+        <ion-label>Entrega</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div *ngIf="('C2|C3|C4|E2|E3|E4'.indexOf(coleta.dadosColetaAtual.status) > -1)">
+    <ion-segment color="amarelo-web" [value]="segmento" (ionChange)="setSegmento($event)"
+      *ngIf="(carregando == false)">
+      <ion-segment-button value="solic">
+        <ion-label
+          *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false) && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)">
+          Solicitação</ion-label>
+        <ion-label *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == true)">Contrato</ion-label>
+        <ion-label *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">Comanda</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="coleta">
+        <ion-label>Coleta</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="entrega">
+        <ion-label>Entrega</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div *ngIf="('CR|CD|ER'.indexOf(coleta.dadosColetaAtual.status) > -1)">
+    <ion-segment color="verde-web" [value]="segmento" (ionChange)="setSegmento($event)"
+      *ngIf="(carregando == false)">
+      <ion-segment-button value="solic">
+        <ion-label
+          *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false) && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)">
+          Solicitação</ion-label>
+        <ion-label *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == true)">Contrato</ion-label>
+        <ion-label *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">Comanda</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="coleta">
+        <ion-label>Coleta</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="entrega">
+        <ion-label>Entrega</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div *ngIf="('C0|C1|C2|C3|C4|CR|CD|E0|E1|E2|E3|E4|ER'.indexOf(coleta.dadosColetaAtual.status) == -1)">
+    <ion-segment color="azul-logo" [value]="segmento" (ionChange)="setSegmento($event)"
+      *ngIf="(carregando == false)">
+      <ion-segment-button value="solic">
+        <ion-label
+          *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false) && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)">
+          Solicitação</ion-label>
+        <ion-label *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == true)">Contrato</ion-label>
+        <ion-label *ngIf="(coleta.getEhComanda(coleta.dadosColetaAtual) == true)">Comanda</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="coleta">
+        <ion-label>Coleta</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="entrega">
+        <ion-label>Entrega</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+</ion-header>
+
+<ion-content>
+
+
+  <!-- Progresso carregando informações -->
+  <ion-progress-bar type="indeterminate" *ngIf="(carregando == true)"></ion-progress-bar>
+
+  <div *ngIf="(carregando == false)">
+
+    <!-- SEGMENTO: SOLICITAÇÃO -->
+    <div *ngIf="(segmento == 'solic')">
+
+      <ion-list>
+
+        <!-- Cliente -->
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Cliente</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.nome_cliente }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Carga -> Não exibimos para CONTRATO e COMANDA -->
+        <ion-item
+          *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false) && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Carga</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.getCargaSolicitacao(coleta.dadosColetaAtual) }}</h2>
+            </ion-text>
+          </ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Dimensões</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.getDimensoesCargaSolicitacao(coleta.dadosColetaAtual) }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Características -->
+        <ion-item *ngIf="(coleta.dadosColetaAtual.caract_coleta > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Características</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.caract_coleta }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Observações -->
+        <ion-item *ngIf="(coleta.dadosColetaAtual.obs_coleta > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Observações</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.obs_coleta }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Instrução -->
+        <ion-item *ngIf="(coleta.dadosColetaAtual.instrucao > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Instrução</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.instrucao }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+      </ion-list>
+
+    </div>
+
+
+    <!-- SEGMENTO: COLETA -->
+    <div *ngIf="(segmento == 'coleta')">
+
+      <ion-list>
+
+        <!-- Local de coleta -->
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <ion-text color="azul-logo">
+              <h2><strong>{{ coleta.dadosColetaAtual.local_coleta }}</strong></h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <!-- Previsão de coleta -->
+          <ion-label class="ion-text-wrap"
+            *ngIf="(coleta.dadosColetaAtual.dt_prev_coleta > '') && (coleta.dadosColetaAtual.hr_prev_coleta > '') && !(coleta.dadosColetaAtual.hr_sai_coleta > '')">
+            <ion-text>
+              <h3>Previsão</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>
+                {{ procs.getDataHoraFormat(coleta.dadosColetaAtual.dt_prev_coleta,
+                coleta.dadosColetaAtual.hr_prev_coleta) }}
+              </h2>
+            </ion-text>
+          </ion-label>
+          <!-- Realizada -->
+          <ion-label class="ion-text-wrap"
+            *ngIf="(coleta.dadosColetaAtual.dt_efet_coleta > '') && (coleta.dadosColetaAtual.hr_sai_coleta > '')">
+            <ion-text>
+              <h3>Realizada</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>
+                {{ procs.getDataHoraFormat(coleta.dadosColetaAtual.dt_efet_coleta,
+                coleta.dadosColetaAtual.hr_sai_coleta) }}
+              </h2>
+            </ion-text>
+          </ion-label>
+          <!-- Placa da coleta -->
+          <ion-label class="ion-text-wrap" *ngIf="(coleta.dadosColetaAtual.placa_coleta > '')">
+            <ion-text>
+              <h3>Placa</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.placa_coleta }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Endereço Coleta -->
+        <ion-item *ngIf="(coleta.getEnderecoLocalSolicitacao(coleta.dadosColetaAtual, 'C') > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Endereço</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.getEnderecoLocalSolicitacao(coleta.dadosColetaAtual, 'C') }}</h2>
+            </ion-text>
+          </ion-label>
+          <!-- Fonte: https://tebros.com/2016/02/launching-external-maps-app-from-ionic2/ -->
+          <ion-button slot="end" fill="clear" [href]="coleta.getLocalizacaoSolicitacao(coleta.dadosColetaAtual, 'C')"
+            target="_system">
+            <ion-icon name="location-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <!-- Solicitante e Sistema de carga -->
+        <ion-item>
+          <ion-label class="ion-text-wrap" *ngIf="(coleta.dadosColetaAtual.solicitante > '')">
+            <ion-text>
+              <h3>Solicitante</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.solicitante }}</h2>
+            </ion-text>
+          </ion-label>
+          <ion-label class="ion-text-wrap" *ngIf="(coleta.dadosColetaAtual.sis_carga > '')">
+            <ion-text>
+              <h3>Sistema de carga</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.getSisCargaSolicitacao(coleta.dadosColetaAtual) }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- Receber NF Frete -->
+        <ion-item *ngIf="(coleta.dadosColetaAtual.receber_nf_frete == 'S')">
+          <ion-chip color="danger">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <ion-label>
+              Enviar nota de frete junto com notas
+            </ion-label>
+          </ion-chip>
+        </ion-item>
+
+      </ion-list>
+
+      <!-- Ações para solicitações do tipo contrato -->
+      <div class="ion-margin" *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == true)">
+
+        <ion-button mode="ios" expand="full" shape="round" *ngIf="(coleta.dadosColetaAtual.status == 'C4')"
+          (click)="finalizarExpediente()">FINALIZAR EXPEDIENTE</ion-button>
+
+      </div>
+
+      <!-- Ações de cancelamento -->
+      <div class="ion-margin">
+
+        <!-- Para comanda não exibimos 'Cancelar Coleta', pois é possível excluir comanda enquanto não houver deslocamento. -->
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'C1') && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)"
+          (click)="cancelarColetaSemDesloc()">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Coleta
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'C2')"
+          (click)="desfazerStatusAtualColeta('cancelar o deslocamento')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Deslocamento
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'C3')" (click)="desfazerStatusAtualColeta('cancelar sua chegada')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Chegada
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'C4')"
+          (click)="desfazerStatusAtualColeta('cancelar o atendimento')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Atendimento
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'CR')" (click)="desfazerStatusAtualColeta('reabrir esta coleta')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Reabrir Coleta
+        </ion-button>
+
+      </div>
+
+      <!-- Ações para solicitações comuns e comandas -->
+      <div class="ion-margin" *ngIf="(coleta.getEhContrato(coleta.dadosColetaAtual) == false)">
+
+        <!-- Devolver Solicitação - Não exibimos essa ação para COMANDA. -->
+        <ion-button mode="ios" expand="full" fill="outline" shape="round" class="ion-margin-top"
+          *ngIf="(coleta.dadosColetaAtual.status == 'C3') && (coleta.getEhComanda(coleta.dadosColetaAtual) == false)"
+          (click)="devolverSemAtendColeta()">Devolver Sem Atendimento</ion-button>
+
+      </div>
+
+    </div>
+
+
+    <!-- SEGMENTO: ENTREGA -->
+    <div *ngIf="(segmento == 'entrega')">
+
+      <ion-list>
+
+        <!-- Local de entrega -->
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <ion-text color="azul-logo">
+              <h2><strong>{{ coleta.dadosColetaAtual.local_entrega }}</strong></h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <ion-item
+          *ngIf="(coleta.dadosColetaAtual.hr_prev_entrega > '') || (coleta.dadosColetaAtual.hr_sai_entrega > '') || (coleta.dadosColetaAtual.placa_entrega > '')">
+          <!-- Previsão de entrega -->
+          <ion-label class="ion-text-wrap"
+            *ngIf="(coleta.dadosColetaAtual.dt_prev_entrega > '') && (coleta.dadosColetaAtual.hr_prev_entrega > '') && !(coleta.dadosColetaAtual.hr_sai_entrega > '')">
+            <ion-text>
+              <h3>Previsão</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>
+                {{ procs.getDataHoraFormat(coleta.dadosColetaAtual.dt_prev_entrega,
+                coleta.dadosColetaAtual.hr_prev_entrega) }}
+              </h2>
+            </ion-text>
+          </ion-label>
+          <!-- Realizada -->
+          <ion-label class="ion-text-wrap"
+            *ngIf="(coleta.dadosColetaAtual.dt_efet_entrega > '') && (coleta.dadosColetaAtual.hr_sai_entrega > '')">
+            <ion-text>
+              <h3>Realizada</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>
+                {{ procs.getDataHoraFormat(coleta.dadosColetaAtual.dt_efet_entrega,
+                coleta.dadosColetaAtual.hr_sai_entrega) }}
+              </h2>
+            </ion-text>
+          </ion-label>
+          <!-- Placa da entrega -->
+          <ion-label class="ion-text-wrap" *ngIf="(coleta.dadosColetaAtual.placa_entrega > '')">
+            <ion-text>
+              <h3>Placa</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.placa_entrega }}</h2>
+            </ion-text>
+          </ion-label>
+          <ion-chip slot="end" color="danger" outline *ngIf="(coleta.dadosColetaAtual.entrega_urgente == 'S')">Urgente
+          </ion-chip>
+        </ion-item>
+
+        <!-- Endereço Entrega -->
+        <ion-item *ngIf="(coleta.getEnderecoLocalSolicitacao(coleta.dadosColetaAtual, 'E') > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Endereço</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.getEnderecoLocalSolicitacao(coleta.dadosColetaAtual, 'E') }}</h2>
+            </ion-text>
+          </ion-label>
+          <!-- Fonte: https://tebros.com/2016/02/launching-external-maps-app-from-ionic2/ -->
+          <ion-button slot="end" fill="clear" [href]="coleta.getLocalizacaoSolicitacao(coleta.dadosColetaAtual, 'E')"
+            target="_system">
+            <ion-icon name="location-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <!--<ion-chip color="primary">mapa</ion-chip>-->
+        </ion-item>
+
+        <!-- Recebedor -->
+        <ion-item *ngIf="(coleta.dadosColetaAtual.recebedor > '')">
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>Recebedor</h3>
+            </ion-text>
+            <ion-text color="medium">
+              <h2>{{ coleta.dadosColetaAtual.recebedor }}</h2>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+
+      </ion-list>
+
+      <div class="ion-margin">
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'E2')"
+          (click)="desfazerStatusAtualColeta('cancelar o deslocamento')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Deslocamento
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'E3')" (click)="desfazerStatusAtualColeta('cancelar sua chegada')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Chegada
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'E4')"
+          (click)="desfazerStatusAtualColeta('cancelar o atendimento')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Cancelar Atendimento
+        </ion-button>
+
+        <ion-button mode="ios" color="danger" expand="full" fill="outline" shape="round"
+          *ngIf="(coleta.dadosColetaAtual.status == 'EP') || (coleta.dadosColetaAtual.status == 'EN')"
+          (click)="desfazerStatusAtualColeta('reabrir esta entrega')">
+          <ion-icon slot="start" name="arrow-undo-outline"></ion-icon>
+          Reabrir Entrega
+        </ion-button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>

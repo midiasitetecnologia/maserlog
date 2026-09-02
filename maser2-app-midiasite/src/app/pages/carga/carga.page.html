@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar color="toolbar">
+    <ion-title>Carga</ion-title>
+    <ion-buttons slot="end" *ngIf="(motorista.getPlacaVeiculo() != '')">
+      <ion-chip [color]="motorista.getCorOcupVeiculo(motorista.getNumberOcupVeiculo())" outline
+        (click)="atualizarVeiculo()" class="ion-margin-end" *ngIf="(motorista.getPlacaVeiculo() != '')">
+        <ion-icon src="../../assets/truck.svg" [color]="motorista.getCorOcupVeiculo(motorista.getNumberOcupVeiculo())">
+        </ion-icon>
+        <ion-label>{{ motorista.getOcupVeiculo(true) }}</ion-label>
+      </ion-chip>
+      <ion-button (click)="exibirCodigoTransferVeiculo()">
+        <ion-icon name="swap-horizontal-sharp" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="fundo">
+
+  <!--
+  <ion-refresher slot="fixed" (ionRefresh)="atualizarCarga($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  -->
+
+  <!-- Progresso atualização -->
+  <ion-progress-bar type="indeterminate" *ngIf="(carregando == true)"></ion-progress-bar>
+
+  <div *ngIf="(motorista.getPlacaVeiculo() == '')">
+    <app-selecionar-veiculo></app-selecionar-veiculo>
+  </div>
+
+  <div *ngIf="(motorista.getPlacaVeiculo() != '')">
+
+    <!-- Exibe a mensagem Nenhuma carga -->
+    <div id="container" *ngIf="(coleta.carga.length == 0)">
+      <ion-label>
+        <ion-text>
+          <h2><strong>Nenhuma carga</strong></h2>
+        </ion-text>
+      </ion-label>
+    </div>
+
+    <!-- Exibe os cards das CARGAS -->
+    <div *ngFor="let c of coleta.carga">
+      <app-card-solicitacao [solicitacao]="c" [ehcarga]="true"></app-card-solicitacao>
+    </div>
+
+  </div>
+
+</ion-content>
+
+
+<!-- Ocupação do Veículo -->
+<!--
+<ion-footer class="ion-no-border" *ngIf="(motorista.getPlacaVeiculo() != '')">
+
+  <ion-toolbar color="fundo">
+    <div style="margin-top: 0px; margin-left: 16px; margin-right: 16px; margin-bottom: 10px;">
+
+      <ion-card button mode="ios" class="ion-no-margin" (click)="atualizarVeiculo()">
+        <ion-item lines="none">
+          <ion-icon src="../../assets/truck.svg" slot="start"
+            [color]="motorista.getCorOcupVeiculo(motorista.getNumberOcupVeiculo())"></ion-icon>
+          <ion-label>
+            <h2>Ocupação: <strong>{{ motorista.getOcupVeiculo(true) }}</strong></h2>
+            <ion-progress-bar mode="md" class="ion-margin-top"
+              [color]="motorista.getCorOcupVeiculo(motorista.getNumberOcupVeiculo())"
+              [value]="motorista.getNumberOcupVeiculo()/100" *ngIf="(motorista.getNumberOcupVeiculo() > 0)">
+            </ion-progress-bar>
+          </ion-label>
+        </ion-item>
+      </ion-card>
+
+    </div>
+  </ion-toolbar>
+  
+</ion-footer>
+-->

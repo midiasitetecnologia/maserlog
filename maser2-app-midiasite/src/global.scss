@@ -1,0 +1,187 @@
+// http://ionicframework.com/docs/theming/
+//@import url('https://fonts.googleapis.com/css?family=Rubik:300,400,500,700');
+//@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+//@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700');
+
+@import "~@ionic/angular/css/core.css";
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+// EXTRA GLOBAL STYLES
+// Add custom Ionic Colors
+@import "./theme/custom-ion-colors.scss";
+// Add base app styles
+@import "./theme/app-defaults.scss";
+// Add base shell styles
+@import "./theme/shell-defaults.scss";
+
+@font-face {
+    font-family: "Product Sans Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Regular.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Italic.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Thin Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Thin.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Light Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Light.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Medium Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Medium.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Black Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Black.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Thin Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-ThinItalic.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Light Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-LightItalic.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Medium Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-MediumItalic.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Bold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-Bold.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Bold Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Product Sans Black Italic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./theme/fonts/google-sans/ProductSans-BlackItalic.woff") format("woff");
+}
+
+/* =========================================================
+   SAFE AREA FIX — Compatibilidade Android 14/15 e iOS 17
+   ========================================================= */
+
+/* Definição global das variáveis de área segura */
+:root {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+}
+
+/* CONTENT — espaçamento automático conforme presença de footer */
+ion-content {
+  --padding-bottom: var(--safe-area-inset-bottom);
+  transition: padding-bottom 0.2s ease;
+}
+
+/* Se existir ion-footer dentro da mesma página, reduz padding-bottom */
+ion-page:has(ion-footer) ion-content {
+  --padding-bottom: 0; /* evita duplicar espaçamento */
+}
+
+/* FOOTER — fica visível acima da barra de gestos */
+ion-footer {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* TAB BAR — também acima da barra de gestos */
+ion-tab-bar {
+  padding-top: 5px; 
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* FAB — garante que botões flutuantes fiquem acessíveis */
+ion-fab {
+  margin-bottom: var(--safe-area-inset-bottom);
+}
+
+/* ========================================================= */
+
+ion-button {
+    text-transform: capitalize;
+}
+
+ion-grid {
+    --ion-grid-columns: 16;
+}
+
+.maser-ion-text-style {
+    font-size: 1.15rem;
+    color: rgb(120, 120, 120);
+}
+
+.maser-ion-input-style {
+    font-size: 1.1rem;
+}
+
+.maser-ion-input-uppercase {
+    text-transform: uppercase;
+}
+
+.maser-ion-padding {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+}
+
+.maser-ion-card-margin {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.maser-ion-card-border {
+    border: 1px solid rgb(225, 225, 225);
+    --background: rgb(255, 255, 255);
+}
+
+.maser-alert {
+    --width: 100%;
+}

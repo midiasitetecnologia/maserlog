@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateWisdomUserTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (!Schema::hasTable('wisdom_user')) {
+
+            Schema::create('wisdom_user', function (Blueprint $table) {
+                $table->engine = 'InnoDB';
+                $table->increments('id');
+                $table->unsignedBigInteger('user_id')->nullable();
+                $table->unsignedInteger('wisdom_id')->nullable();
+                $table->timestamps();                
+
+                $table->foreign('user_id')->references('id')->on('users');            
+                $table->foreign('wisdom_id')->references('id')->on('wisdom');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('wisdom_user');
+    }
+}

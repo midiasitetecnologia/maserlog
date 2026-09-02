@@ -1,0 +1,193 @@
+<ion-header>
+  <ion-toolbar color="toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="location.back()">
+        <ion-icon name="arrow-back-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Notas Fiscais</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="atualizarNotas()">
+        <ion-icon name="reload-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="fundo">
+
+  <ion-progress-bar type="indeterminate" *ngIf="(carregando == true)"></ion-progress-bar>
+
+  <div id="container" *ngIf="((coleta.notasFiscais.length == 0) && (carregando == false))">
+    <ion-label>
+      <ion-text>
+        <h2><strong>Nenhuma nota fiscal</strong></h2>
+      </ion-text>
+    </ion-label>
+  </div>
+
+  <ion-card mode="ios" *ngFor="let nf of coleta.notasFiscais">
+
+    <!-- Dados da nota -->
+    <ion-grid style="margin-top: 8px; margin-bottom: 8px; margin-left: 10px; margin-right: 10px;">
+      <ion-row>
+        <ion-col size="6">
+          <ion-label>
+            <h2><strong>{{ nf.numero }}</strong></h2>
+          </ion-label>
+        </ion-col>
+        <ion-col size="3">
+          <ion-label class="ion-text-center">
+            <h2>{{ nf.volumes }} vol</h2>
+          </ion-label>
+        </ion-col>
+        <ion-col size="7">
+          <ion-label class="ion-text-right">
+            <h2><strong>R$ {{ nf.valor }}</strong></h2>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <!-- Coleta iniciada - Ações: alterar ou excluir -->
+    <ion-grid *ngIf="(coleta.dadosColetaAtual.status == 'C4')">
+      <ion-row>
+
+        <ion-col>
+          <div>
+            <ion-button mode="ios" expand="block" fill="outline" size="default" (click)="atualizarNotaFiscal(nf)">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Alterar
+            </ion-button>
+          </div>
+        </ion-col>
+
+        <ion-col>
+          <div>
+            <ion-button mode="ios" color="danger" expand="block" fill="outline" size="default"
+              (click)="excluirNotaFiscal(nf)">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Excluir
+            </ion-button>
+          </div>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+    <!-- Espaço entre as informações -->
+    <div style="background-color: rgb(225, 225, 225); height: 1px; margin-left: 20px; margin-right: 20px;"
+      *ngIf="(procs.tratarStrNull(nf.url_recibo) != '') || (procs.tratarStrNull(nf.mot_nao_entrega) != '')"></div>
+
+
+    <!-- Entrega iniciada - Ações: enviar recibo ou informar motivo não entregue -->
+    <div *ngIf="(coleta.dadosColetaAtual.status == 'E4')">
+
+      <div *ngIf="((procs.tratarStrNull(nf.url_recibo) == '') && (procs.tratarStrNull(nf.mot_nao_entrega) == ''))">
+
+        <div style="margin: 10px;"
+          *ngIf="(coleta.dadosColetaAtual.realizada == 'S') || (coleta.dadosColetaAtual.realizada == 'P')">
+          <ion-button mode="ios" expand="block" fill="outline" size="default" (click)="tirarFotoReciboNotaFiscal(nf)">
+            <ion-icon name="camera-outline" slot="start"></ion-icon>
+            Enviar Recibo
+          </ion-button>
+        </div>
+
+        <div style="margin: 10px;"
+          *ngIf="(coleta.dadosColetaAtual.realizada == 'N') || (coleta.dadosColetaAtual.realizada == 'P')">
+          <ion-button mode="ios" color="danger" expand="block" fill="outline" size="default"
+            (click)="informarMotivoNaoEntregaNotaFiscal(nf)">
+            Informar Motivo Não Entrega
+          </ion-button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Dados recibo -->
+    <ion-item lines="none" style="margin-top: 8px; margin-bottom: 8px;"
+      *ngIf="(procs.tratarStrNull(nf.url_recibo) > '')">
+      <ion-icon name="checkmark-circle-outline" color="verde-web"></ion-icon>
+      <ion-label style="margin-left: 8px;">
+        <ion-label color="verde-web">
+          <h2>Nota entregue</h2>
+        </ion-label>
+        <ion-label color="medium">
+          <h3>Recibo enviado</h3>
+        </ion-label>
+      </ion-label>
+      <ion-button slot="end" size="Alterar" fill="outline" (click)="reatualizarRecibo(nf)"
+        *ngIf="(coleta.dadosColetaAtual.status == 'E4')">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+
+    <!-- Dados motivo não entregue -->
+    <ion-item lines="none" style="margin-top: 8px; margin-bottom: 8px;"
+      *ngIf="(procs.tratarStrNull(nf.mot_nao_entrega) > '')">
+      <ion-icon name="close-circle-outline" color="vermelho-web"></ion-icon>
+      <ion-label style="margin-left: 8px;">
+        <ion-label color="vermelho-web">
+          <h2>Nota não entregue</h2>
+        </ion-label>
+        <ion-label color="medium">
+          <h3 *ngIf="(nf.mot_nao_entrega == '51')">Mercadoria não conforme</h3>
+          <h3 *ngIf="(nf.mot_nao_entrega == '52')">Recusa de nota fiscal</h3>
+        </ion-label>
+      </ion-label>
+      <ion-button slot="end" size="default" fill="outline" (click)="informarMotivoNaoEntregaNotaFiscal(nf)"
+        *ngIf="(coleta.dadosColetaAtual.status == 'E4')">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Botão para alterar a situação da nota quando a entrega for Parcial -->
+    <div *ngIf="(coleta.dadosColetaAtual.status == 'E4') && 
+      (coleta.dadosColetaAtual.realizada == 'P') &&  
+      ((procs.tratarStrNull(nf.url_recibo) != '') || (procs.tratarStrNull(nf.mot_nao_entrega) != ''))">
+
+      <div style="background-color: rgb(225, 225, 225); height: 1px; margin-left: 20px; margin-right: 20px;">
+      </div>
+
+      <div style="margin: 20px;">
+        <ion-button mode="ios" expand="block" fill="outline" size="default" (click)="alterarSituacaoNota(nf)">
+          Alterar situação da nota
+        </ion-button>
+      </div>
+
+    </div>
+
+
+  </ion-card>
+
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="fundo">
+
+    <ion-card mode="ios" *ngIf="(coleta.notasFiscais.length > 0)">
+      <ion-item lines="none">
+        <ion-label color="medium">
+          <!--
+          <H3 *ngIf="(coleta.notasFiscais.length == 1)">Total (1 nota): <strong>R$ {{ getTotalNotas() }}</strong></H3>
+          <H3 *ngIf="(coleta.notasFiscais.length > 1)">Total ({{ coleta.notasFiscais.length }} notas): <strong>R$
+              {{ getTotalNotas() }}</strong></H3>
+          -->
+          <H3>Notas: <strong>{{ coleta.notasFiscais.length }}</strong>&nbsp;&nbsp;Vols:
+            <strong>{{ getTotalVolumes() }}</strong>&nbsp;&nbsp;Total: <strong>R$ {{ getTotalNotas() }}</strong>
+          </H3>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <ion-fab-button slot="end" class="ion-margin-vertical ion-margin-end" (click)="incluirNotaFiscal()"
+      *ngIf="(coleta.dadosColetaAtual.status == 'C4')">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+
+  </ion-toolbar>
+</ion-footer>

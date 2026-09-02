@@ -1,0 +1,7 @@
+{
+  "name": "Maser",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

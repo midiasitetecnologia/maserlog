@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="location.back()">
+        <ion-icon name="arrow-back-outline" color="azul-logo" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nota Fiscal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngIf="(coleta.dadosNotaAtual.coleta_nf_id == '')">
+    <ion-item button detail lines="none" (click)="lerCodBarras()">
+      <ion-icon name="camera-outline" color="primary" slot="start"></ion-icon>
+      <ion-label color="primary">
+        Usar leitor de código de barras
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <div class="ion-padding">
+
+    <ion-item>
+      <ion-label position="stacked">
+        <ion-text class="maser-ion-text-style">Chave de acesso</ion-text>
+      </ion-label>
+      <ion-textarea [(ngModel)]="coleta.dadosNotaAtual.cod_barras" autoGrow enterkeyhint="next" inputmode="numeric"
+        maxlength="44" rows="1" required [disabled]="(coleta.dadosNotaAtual.coleta_nf_id > '')"
+        class="maser-ion-input-style" (ionBlur)="carregarDadosNota()">
+      </ion-textarea>
+    </ion-item>
+    <div class="ion-margin-horizontal ion-margin-bottom" *ngIf="(chave_invalida == true)">
+      <ion-text color="danger" class="ion-text-left"><sub>Chave de acesso inválida. A chave deve ter 44 dígitos.</sub>
+      </ion-text>
+    </div>
+
+    <ion-item class="ion-no-padding">
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          <ion-text class="maser-ion-text-style">Número</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="coleta.dadosNotaAtual.numero" disabled class="maser-ion-input-style"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          <ion-text class="maser-ion-text-style">Série</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="coleta.dadosNotaAtual.serie" disabled class="maser-ion-input-style"></ion-input>
+      </ion-item>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">
+        <ion-text class="maser-ion-text-style">Valor</ion-text>
+      </ion-label>
+      <ion-input [(ngModel)]="coleta.dadosNotaAtual.valor" type="number" required class="maser-ion-input-style"
+        (ionBlur)="tratarValor()">
+      </ion-input>
+    </ion-item>
+    <div class="ion-margin-horizontal ion-margin-bottom" *ngIf="(valor_invalido == true)">
+      <ion-text color="danger" class="ion-text-left"><sub>Valor inválido. Use vírgula ou ponto apenas como separador
+          decimal dos centavos.</sub>
+      </ion-text>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">
+        <ion-text class="maser-ion-text-style">Volumes</ion-text>
+      </ion-label>
+      <ion-input [(ngModel)]="coleta.dadosNotaAtual.volumes" type="number" required class="maser-ion-input-style">
+      </ion-input>
+    </ion-item>
+
+    <!-- Para comanda e local de distribuição NÃO precisa informar os últimos dois dígitos do CNPJ -->
+    <ion-item
+      *ngIf="(coleta.dadosNotaAtual.coleta_nf_id == '') && (coleta.getEhComanda(coleta.dadosColetaAtual) == false) && !(coleta.dadosColetaAtual.local_distrib == 'S')">
+      <ion-label position="stacked">
+        <ion-text class="maser-ion-text-style">Últimos dois dígitos do CNPJ</ion-text>
+      </ion-label>
+      <ion-input [(ngModel)]="coleta.dadosNotaAtual.dig_cnpj" type="number" maxlength=2 class="maser-ion-input-style">
+      </ion-input>
+    </ion-item>
+
+    <div class="ion-padding-top">
+      <ion-button mode="ios" expand="full" shape="round" (click)="incluirNotaFiscal(coleta.dadosNotaAtual)"
+        *ngIf="(coleta.dadosNotaAtual.coleta_nf_id == '')">
+        INCLUIR NOTA FISCAL
+      </ion-button>
+
+      <ion-button mode="ios" expand="full" shape="round" (click)="atualizarNotaFiscal(coleta.dadosNotaAtual)"
+        *ngIf="(coleta.dadosNotaAtual.coleta_nf_id != '')">
+        ATUALIZAR NOTA FISCAL
+      </ion-button>
+    </div>
+
+  </div>
+
+</ion-content>

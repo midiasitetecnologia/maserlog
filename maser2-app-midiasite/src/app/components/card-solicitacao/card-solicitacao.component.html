@@ -1,0 +1,310 @@
+<!-- CONTRATO ------------------------------------------------------------------------------------>
+<div *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) == 'T') && (ehcarga == false)">
+
+  <ion-card mode="ios" style="margin-left: 0px; margin-right: 0px; margin-top: 10px; margin-bottom: 25px;">
+
+    <!-- Cabeçalho -->
+    <ion-item lines="none" color="azul-logo">
+      <ion-label>
+        <h2>{{ coleta.getIdSolicitacao(solicitacao) }} {{ solicitacao.nome_cliente }}</h2>
+      </ion-label>
+    </ion-item>
+
+    <!-- O ion-grid foi configurado com 16 colunas (global.scss) -->
+    <ion-grid fixed>
+      <ion-row>
+
+        <ion-col size="13" class="ion-no-padding">
+          <ion-button expand="block" fill="outline" (click)="incluirComanda(solicitacao)">
+            <ion-icon name="add-circle-outline" color="primary" slot="start"></ion-icon>
+            Incluir Comanda
+          </ion-button>
+        </ion-col>
+
+        <!-- Detalhes da solicitação -->
+        <ion-col size="3" class="ion-no-padding">
+          <ion-button expand="block" fill="outline" icon-only (click)="abrirColeta(solicitacao)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+  </ion-card>
+
+</div>
+
+
+
+<!-- SOLICITAÇÃO --------------------------------------------------------------------------------->
+<div *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) != 'T') && (ehcarga == false)">
+
+  <ion-card mode="ios" style="margin-left: 0px; margin-right: 0px; margin-top: 10px; margin-bottom: 25px;">
+
+    <!-- ID e Status -->
+    <ion-item lines="none">
+      <ion-label class="ion-text-left ion-text-wrap">
+        <h2><strong>{{ coleta.getIdSolicitacao(solicitacao, true) }}</strong></h2>
+      </ion-label>
+      <ion-label [color]="coleta.getCorSolicitacao(solicitacao)" class="ion-text-right ion-text-wrap">
+        <h3><strong>{{ solicitacao.txt_status }}</strong></h3>
+      </ion-label>
+    </ion-item>
+
+    <div class="ion-padding-horizontal ion-padding-bottom">
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.1" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'C1')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.4" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'C2')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.7" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'C3')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.9" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'C4')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="1" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'CR')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.1" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'E1')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.4" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'E2')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.7" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'E3')">
+      </ion-progress-bar>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="0.9" style="height: 5px;"
+        *ngIf="(solicitacao.status == 'E4')">
+      </ion-progress-bar>
+    </div>
+
+    <!-- Local de coleta -->
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          <h3>Coleta</h3>
+        </ion-text>
+        <h2>{{ solicitacao.local_coleta }}</h2>
+      </ion-label>
+      <ion-chip slot="end" outline
+        *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) == 'C') && (solicitacao.dt_prev_coleta > '') && (solicitacao.hr_prev_coleta > '')">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label>
+          {{ procs.getDataHoraFormat(solicitacao.dt_prev_coleta, solicitacao.hr_prev_coleta) }}
+        </ion-label>
+      </ion-chip>
+      <ion-icon name="checkmark-circle-outline" color="verde-web" slot="end"
+        *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) != 'C')"></ion-icon>
+    </ion-item>
+
+    <!-- Local de entrega -->
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          <h3>Entrega</h3>
+        </ion-text>
+        <h2>{{ solicitacao.local_entrega }}</h2>
+      </ion-label>
+
+      <ion-chip slot="end" outline *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) == 'E') 
+        && (solicitacao.dt_prev_entrega > '') 
+        && (solicitacao.hr_prev_entrega > '') 
+        && (solicitacao.entrega_urgente != 'S')">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label>
+          {{ procs.getDataHoraFormat(solicitacao.dt_prev_entrega, solicitacao.hr_prev_entrega) }}
+        </ion-label>
+      </ion-chip>
+
+      <ion-chip slot="end" color="danger" outline *ngIf="(solicitacao.entrega_urgente == 'S')">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) != 'E')">Urgente</ion-label>
+        <ion-label *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) == 'E') 
+          && (solicitacao.dt_prev_entrega > '') 
+          && (solicitacao.hr_prev_entrega > '')">
+          Urgente, {{ procs.getDataHoraFormat(solicitacao.dt_prev_entrega, solicitacao.hr_prev_entrega) }}
+        </ion-label>
+      </ion-chip>
+    </ion-item>
+
+    <!-- Instrução -->
+    <ion-item lines="none"
+      *ngIf="(exibir_instrucao == true) && (solicitacao.instrucao > '') && (coleta.getEhContrato(solicitacao) == false)">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          <h3>Instrução</h3>
+        </ion-text>
+        <h2>{{ solicitacao.instrucao }}</h2>
+      </ion-label>
+    </ion-item>
+
+    <!-- Receber NF Frete -->
+    <ion-item lines="none" *ngIf="((exibir_receber_nf_frete == true) && (solicitacao.receber_nf_frete == 'S'))">
+      <ion-chip color="danger">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <ion-label>
+          Enviar nota de frete junto com notas
+        </ion-label>
+      </ion-chip>
+    </ion-item>
+
+    <!-- O ion-grid foi configurado com 16 colunas (global.scss) -->
+    <ion-grid fixed>
+      <ion-row>
+
+        <!-- Ações conforme o status -->
+        <ion-col size="10" class="ion-no-padding">
+
+          <ion-button expand="block" fill="outline" *ngIf="(solicitacao.status == 'C1')"
+            (click)="setarDeslocaColeta(solicitacao)">Ir Para Local Da Coleta</ion-button>
+
+          <ion-button expand="block" fill="outline" *ngIf="(solicitacao.status == 'C2')"
+            (click)="setarChegadaColeta(solicitacao)">Cheguei no local da coleta</ion-button>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'C3') && (coleta.getEhContrato(solicitacao) == false)"
+            (click)="setarInicioAtendColeta(solicitacao)">Iniciar Atendimento</ion-button>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'C3') && (coleta.getEhContrato(solicitacao) == true)"
+            (click)="iniciarExpediente(solicitacao)">Iniciar Expediente</ion-button>
+
+          <div *ngIf="(solicitacao.status == 'C4') && (coleta.getEhContrato(solicitacao) == false)">
+            <ion-row>
+              <ion-col size="6" class="ion-no-padding">
+                <ion-button expand="block" fill="outline" (click)="abrirNotasFiscais(solicitacao)">
+                  Notas</ion-button>
+              </ion-col>
+              <ion-col size="10" class="ion-no-padding">
+                <ion-button expand="block" fill="outline" (click)="finalizarColeta(solicitacao)">
+                  Finalizar coleta</ion-button>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'E1') && (coleta.getEhContrato(solicitacao) == false)"
+            (click)="setarDeslocaEntrega(solicitacao)">Ir Para Local da Entrega</ion-button>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'E2') && (coleta.getEhContrato(solicitacao) == false)"
+            (click)="setarChegadaEntrega(solicitacao)">Cheguei no local da entrega</ion-button>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'E3') && (coleta.getEhContrato(solicitacao) == false)"
+            (click)="setarInicioAtendEntrega(solicitacao)">Iniciar Atendimento</ion-button>
+
+          <ion-button expand="block" fill="outline"
+            *ngIf="(solicitacao.status == 'E4') && (coleta.getEhContrato(solicitacao) == false)"
+            (click)="finalizarEntrega(solicitacao)">Finalizar entrega</ion-button>
+
+        </ion-col>
+
+        <!-- Abrir navegação (destino: coleta/entrega) -->
+        <ion-col size="3" class="ion-no-padding">
+          <ion-button icon-only expand="block" fill="outline"
+            [disabled]="(coleta.getLocalizacaoSolicitacao(solicitacao, 'D') == '')"
+            [href]="coleta.getLocalizacaoSolicitacao(solicitacao, 'D')" target="_system">
+            <ion-icon name="location-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+        <!-- Detalhes da solicitação -->
+        <ion-col size="3" class="ion-no-padding">
+          <ion-button icon-only expand="block" fill="outline" (click)="abrirColeta(solicitacao)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+  </ion-card>
+
+</div>
+
+<!-- CARGA --------------------------------------------------------------------------------------->
+<div *ngIf="(coleta.getTipoSolicitacao(solicitacao, ehcontrato) != 'T') && (ehcarga == true)">
+
+  <ion-card mode="ios" style="margin-left: 10px; margin-right: 10px; margin-top: 15px; margin-bottom: 15px;">
+
+    <div>
+      <ion-progress-bar [color]="coleta.getCorSolicitacao(solicitacao)" value="1" style="height: 5px;">
+      </ion-progress-bar>
+    </div>
+
+    <ion-grid fixed class="ion-padding-horizontal">
+      <ion-row>
+        <ion-col size="7">
+          <ion-label class="ion-text-left ion-text-wrap">
+            <h2><strong>{{ coleta.getIdSolicitacao(solicitacao, true) }}</strong></h2>
+          </ion-label>
+        </ion-col>
+        <ion-col size="9">
+          <ion-label [color]="coleta.getCorSolicitacao(solicitacao)" class="ion-text-right ion-text-wrap">
+            <h3><strong>{{ solicitacao.txt_status }}</strong></h3>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Local de coleta -->
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          <h3>Coleta</h3>
+        </ion-text>
+        <h2>{{ solicitacao.local_coleta }}</h2>
+      </ion-label>
+    </ion-item>
+
+    <!-- Local de entrega -->
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="medium">
+          <h3>Entrega</h3>
+        </ion-text>
+        <h2>{{ solicitacao.local_entrega }}</h2>
+      </ion-label>
+    </ion-item>
+
+    <!-- O ion-grid foi configurado com 16 colunas (global.scss) -->
+    <ion-grid fixed>
+      <ion-row>
+
+        <!-- Ações conforme o status -->
+        <ion-col size="9" class="ion-no-padding">
+
+          <!-- Descarregar carga (Coleta Realizada, Entrega Parcial, Entrega Não Realizada) -->
+          <ion-button expand="block" fill="outline"
+            *ngIf="((solicitacao.status == 'CR') || (solicitacao.status == 'EN') || (solicitacao.status == 'EP')) && !(solicitacao.placa_baldeacao > '')"
+            (click)="setarDescargaColeta(solicitacao)">Descarregar Coleta</ion-button>
+
+          <ion-button expand="block" fill="outline" *ngIf="(solicitacao.placa_baldeacao > '')"
+            (click)="baldearColeta(solicitacao)">Baldear para {{ solicitacao.placa_baldeacao }}</ion-button>
+
+        </ion-col>
+
+        <!-- Notas da solicitação -->
+        <ion-col size="4" class="ion-no-padding">
+          <ion-button expand="block" fill="outline" (click)="abrirNotasFiscais(solicitacao)">
+            Notas {{ solicitacao.qtde_notas }}</ion-button>
+        </ion-col>
+
+        <!-- Detalhes da solicitação -->
+        <ion-col size="3" class="ion-no-padding">
+          <ion-button icon-only expand="block" fill="outline" (click)="abrirColeta(solicitacao)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+  </ion-card>
+
+</div>

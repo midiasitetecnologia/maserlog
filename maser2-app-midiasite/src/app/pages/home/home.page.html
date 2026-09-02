@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="toolbar">
+    <ion-thumbnail slot="start" class="ion-margin-start" (click)="acessarModelo()">
+      <img src="assets/logo-maser.png">
+    </ion-thumbnail>
+    <ion-title>MASER</ion-title>
+    <ion-buttons slot="end">
+      <ion-chip color="primary" outline (click)="alterarVeiculo()" class="ion-margin-end"
+        *ngIf="(motorista.getPlacaVeiculo() != '')">
+        <ion-label>{{ motorista.getPlacaVeiculo() }}</ion-label>
+      </ion-chip>
+      <ion-button (click)="atualizarHome()">
+        <ion-icon name="reload-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="fundo">
+
+  <!--
+  <ion-refresher slot="fixed" (ionRefresh)="atualizarHome(true, $event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  -->
+
+  <!-- Progresso atualização -->
+  <ion-progress-bar type="indeterminate" *ngIf="(carregando == true)"></ion-progress-bar>
+
+  <div *ngIf="(motorista.getPlacaVeiculo() == '')">
+    <app-selecionar-veiculo></app-selecionar-veiculo>
+  </div>
+
+  <div *ngIf="(motorista.getPlacaVeiculo() != '')">
+
+    <!-- Exibe a mensagem Nenhuma solicitação -->
+    <div id="container" (click)="atualizarHome()"
+    *ngIf="(carregando == false) && (coleta.rota.length == 0) && ((coleta.contrato == '') || (coleta.contrato == null))">
+
+      <ion-icon name="reload-outline" color="medium"></ion-icon>
+
+      <ion-label>
+        <ion-text>
+          <h2><strong>Nenhuma solicitação</strong></h2>
+          <p>
+            <ion-text color="primary">Toque aqui para atualizar</ion-text>
+          </p>
+        </ion-text>
+      </ion-label>
+
+    </div>
+
+    <!-- Exibe o card de CONTRATO -->
+    <div *ngIf="((coleta.contrato != '') && (coleta.contrato != null))">
+      <app-card-solicitacao [solicitacao]="coleta.contrato" [ehcontrato]="true"></app-card-solicitacao>
+    </div>
+
+    <!-- Exibe os cards das SOLICITAÇÕES (Rota) -->
+    <div *ngFor="let solic of coleta.rota">
+      <app-card-solicitacao [solicitacao]="solic" [exibir_instrucao]="true" [exibir_receber_nf_frete]="true"></app-card-solicitacao>
+    </div>
+
+    <!-- Exibe o card da SOLICITAÇÃO ATUAL -->
+    <!--
+    <div *ngIf="((coleta.atual != '') && (coleta.atual != null))">
+      <app-card-solicitacao [solicitacao]="coleta.atual" [exibir_instrucao]="true" [exibir_receber_nf_frete]="true">
+      </app-card-solicitacao>
+    </div>
+    -->
+
+  </div>
+
+</ion-content>

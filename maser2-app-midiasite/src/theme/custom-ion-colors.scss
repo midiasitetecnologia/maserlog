@@ -1,0 +1,20 @@
+@import "./mixins/ion-color";
+
+// Add custom colors to use with [color] property
+// (see: https://forum.ionicframework.com/t/adding-custom-colours-to-use-with-color-property/136919)
+// GLOBAL COLORS:
+//    You can define new Ionic colors here (inside :root{ ... }) to be available within the entire app
+// LOCAL COLORS:
+//    You can also define new Ionic colors in each page (inside :host{ ... }) to be available just in that page
+//    (We have an example of local custom Ionic colors in the deals pages)
+:root {
+  @include ion-color("laranja") {
+    --ion-color-laranja: #ff7b00;
+    --ion-color-laranja-rgb: 255, 123, 0;
+    --ion-color-laranja-contrast: #ffffff;
+    --ion-color-laranja-contrast-rgb: 255, 255, 255;
+    --ion-color-laranja-shade: #e06c00;
+    --ion-color-laranja-tint: #ff881a;
+  }
+
+}

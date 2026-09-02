@@ -1,0 +1,38 @@
+
+// CERTIFICADO/KEYSTORE para assinar o APK maser-app
+// --------------------------------------------------------
+
+// Arquivo:
+// maser-app-key.keystore
+
+// Alias:
+// maser-app
+
+// Password:
+// *maser#
+
+
+
+// Perguntas e Respostas na geração do arquivo maser-app-key.keystore
+// --------------------------------------------------------
+
+Informe a senha da área de armazenamento de chaves:
+*maser#
+
+Qual é o seu nome e o seu sobrenome?
+jonas Antunes Ramos
+
+Qual é o nome da sua unidade organizacional?
+RGSoft Informática
+
+Qual é o nome da sua empresa?
+RGSoft Informática
+
+Qual é o nome da sua Cidade ou Localidade?
+Caxias do Sul
+
+Qual é o nome do seu Estado ou Município?
+RS
+
+Quais são as duas letras do código do país desta unidade?
+BR

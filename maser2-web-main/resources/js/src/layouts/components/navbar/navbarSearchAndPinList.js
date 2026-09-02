@@ -1,0 +1,30 @@
+export default {
+	pages: {
+		key: "title",
+		data: [
+			{ title: "Home", url: "/", icon: "HomeIcon", is_bookmarked: false },
+			{ title: "Corrigir Cadastros", url: "/corrigir-cadastros", icon: "UsersIcon", is_bookmarked: false },
+			{ title: "Emitir Notas Fiscais", url: "/emitir-notas-fiscais", icon: "FileIcon", is_bookmarked: false },
+			{ title: "Clientes", url: "/cliente", icon: "UsersIcon", is_bookmarked: false },
+			{ title: "Motoristas", url: "/motorista", icon: "CrosshairIcon", is_bookmarked: false },
+			{ title: "Tipos de Veículo", url: "/tipo-veiculo", icon: "TagIcon", is_bookmarked: false },
+			{ title: "Veículos", url: "/veiculo", icon: "TruckIcon", is_bookmarked: false },
+			{ title: "Buscar Veículos", url: "/buscar-veiculos", icon: "TruckIcon", is_bookmarked: false },
+			{ title: "Solicitar Coletas", url: "/coleta-web", icon: "FilePlusIcon", is_bookmarked: false },
+			{ title: "Distribuição de Entregas", url: "/distribuicao-entregas", icon: "Share2Icon", is_bookmarked: false },
+			{ title: "Reentrega", url: "/definir-reentrega", icon: "ClipboardIcon", is_bookmarked: false },
+			{ title: "Coletas Fixas", url: "/coleta-fixa", icon: "ClipboardIcon", is_bookmarked: false },
+			{ title: "Arquivadas", url: "/coleta", icon: "ClipboardIcon", is_bookmarked: false },
+			{ title: "Resumos Km + Hrs", url: "/resumo-km-tempo", icon: "FileIcon", is_bookmarked: false },
+			{ title: "Controle", url: "/controle", icon: "MonitorIcon", is_bookmarked: false },
+			{ title: "Operação", url: "/operacao", icon: "PackageIcon", is_bookmarked: false },
+			{ title: "Resumo do Dia", url: "/resumo-dia", icon: "LayersIcon", is_bookmarked: false },
+			{ title: "Configurações", url: "/configuracao", icon: "SettingsIcon", is_bookmarked: false },
+			{ title: "Serviços API", url: "/distance-matrix", icon: "KeyIcon", is_bookmarked: false },
+			{ title: "Empresas", url: "/empresa", icon: "DatabaseIcon", is_bookmarked: false },
+			{ title: "Contas de Usuários", url: "/users", icon: "UserIcon", is_bookmarked: false },
+			{ title: "Logs de Processamento", url: "/log-pro", icon: "FileTextIcon", is_bookmarked: false },
+			{ title: "Sabedoria", url: "/sabedoria", icon: "BookOpenIcon", is_bookmarked: false },
+		]
+	},
+}

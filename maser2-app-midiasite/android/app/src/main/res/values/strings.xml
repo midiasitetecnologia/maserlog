@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Maser</string>
+    <string name="title_activity_main">Maser</string>
+    <string name="package_name">br.com.masertransportes.appmaser</string>
+    <string name="custom_url_scheme">br.com.masertransportes.appmaser</string>
+</resources>
